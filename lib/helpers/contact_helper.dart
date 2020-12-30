@@ -30,12 +30,12 @@ class ContactHelper {
 
   Future<Database> initDb() async {
     final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, "contacts.db");
+    final path = join(databasesPath, "contactsnew.db");
 
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn Text"
+          "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn Text,"
           "$phoneColumn TEXT, $imgColumn TEXT)");
     });
   }
@@ -76,14 +76,15 @@ class ContactHelper {
     List listMap = await dbContact.rawQuery("SELECT * FROM $contactTable");
     List<Contact> listContact = List();
     for (Map m in listMap) {
-      listContact.add(Contact.fromMap(m))
+      listContact.add(Contact.fromMap(m));
     }
     return listContact;
   }
 
   Future<int> getNumber() async {
     Database dbContact = await db;
-    return Sqflite.firstIntValue(await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable"))
+    return Sqflite.firstIntValue(
+        await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable"));
   }
 
   Future close() async {
